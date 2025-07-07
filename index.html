@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vedic Maths </title>
+    <!-- CSS styles -->
+    <link rel="stylesheet" href="/CSS/index.css">
+    <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/css/intlTelInput.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <div class="main">
+        <div class="header" style="display: flex; justify-content: center; margin: 0px 0px;">
+            <img style="width: 170px;" src="assets/Untitled-2.png" alt="logo">
+        </div>
+        <!-- hero section -->
+        <div id="hero-section">
+            <h2 class="hero-h2"> 3-Days Free Vedic Maths Webinar</h2>
+            <div class="hero-img"> <img src="assets/DataManagement.png" alt=""></div>
+        </div>
+
+        <div id="form-div">
+            <form action="" method="POST" id="form">
+                <!-- user section -->
+                <div id="user-section">
+                  <div class="form-group">
+                    <label class="label-rq" for="name">Full Name</label>
+                    <input type="text" id="name" placeholder="Full Name" required>
+                </div>
+                  
+                  <div class="form-group">
+                        <label class="label-rq" for="wanumber">Phone Number</label>
+                        <input type="tel" id="wanumber" placeholder="Enter your WhatsApp number" required>
+                    </div>
+
+                    
+
+                    <div class="form-group">
+                        <label for="email">Your Email Address</label>
+                        <input type="email" id="email" placeholder="Email">
+                    </div>
+
+                  
+                    <div class="form-group">
+                        <label class="label-rq" for="reason">School Name</label>
+                        <textarea id="reason" placeholder="Enter The School Name" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="label-rq" for="schoolArea">School Area</label>
+                        <input type="text" id="schoolArea" placeholder="Enter Your School Area" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="label-rq" for="className">Class</label>
+                        <input type="text" id="className" placeholder="Class" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="label-rq" for="city">City</label>
+                        <input type="text" id="city" placeholder="Enter Your City Name" required>
+                    </div>
+                </div>
+                <button type="button" id="submitBtn" onclick="submitForm()">Register for Webinar</button>
+
+                <script>
+                    function setLoading(isLoading) {
+                        const btn = document.getElementById('submitBtn');
+                        if (isLoading) {
+                            btn.textContent = 'Loading...';
+                            btn.disabled = true;
+                        } else {
+                            btn.textContent = 'Register for Webinar';
+                            btn.disabled = false;
+                        }
+                    }
+
+                    function submitForm() {
+                        setLoading(true); // Show loading state
+
+                        const phone = document.getElementById('wanumber').value;
+                        const name = document.getElementById('name').value;
+                        const email = document.getElementById('email').value;
+                        const school = document.getElementById('reason').value;
+                        const schoolArea = document.getElementById('schoolArea').value;
+                        const className = document.getElementById('className').value;
+                        const city = document.getElementById('city').value;
+
+                        const formData = {
+                            fullName: name,
+                            phoneNumber: phone,
+                            email: email,
+                            schoolName: school,
+                            schoolArea: schoolArea,
+                            class: className,
+                            city: city
+                        };
+
+                        // 1. Submit to Google Apps Script
+                        const scriptUrl = 'https://script.google.com/macros/s/AKfycbxFkIDJWRkkQZlc6Si-P4O0xG7r3Hv6Hj-dj9GvuqUWVVQp4qd3zS_461w5Tb-c_u5V/exec';
+                        fetch(scriptUrl, {
+                            method: 'POST',
+                            mode: 'no-cors',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(formData),
+                        });
+
+                        // 2. Trigger AiSensy campaign
+                        const aiSensyData = {
+                            apiKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3M2M5NDFiN2I0YWMxMGJlYjhhODM2MCIsIm5hbWUiOiJERU1PIDE5dGggTm92IiwiYXBwTmFtZSI6IkFpU2Vuc3kiLCJjbGllbnRJZCI6IjY3MmRhNDQ1ZTU4N2NkMGJlZDcxZTM1MyIsImFjdGl2ZVBsYW4iOiJQUk9fTU9OVEhMWSIsImlhdCI6MTczODQwNTgyNX0.-cfSHxvF-ReV8TGNX3M65RTKo4vcpvcH9jNjSA1B8Bo",
+                            campaignName: "vedicmathsv4",
+                            destination: `91${phone}`,
+                            userName: name,
+                            templateParams: [name || "user"],
+                            source: "new-landing-page form",
+                            media: {
+                                url: "https://whatsapp-media-library.s3.ap-south-1.amazonaws.com/IMAGE/673c941b7b4ac10beb8a8360/8260309_WhatsApp%20Image%2020250629%20at%2011.22.304ef6bf31.jpg",
+                                filename: "sample_media"
+                            },
+                            buttons: [],
+                            carouselCards: [],
+                            location: {},
+                            attributes: {},
+                            paramsFallbackValue: {
+                                FirstName: "user"
+                            }
+                        };
+
+                        fetch('https://backend.aisensy.com/campaign/t1/api/v2', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(aiSensyData),
+                        })
+                        .then(() => {
+                            // Fetch WhatsApp link from Google Apps Script (plain text)
+                            fetch('https://script.google.com/macros/s/AKfycbzDHfEAbNyk0aY2KmlMPkthWYDSRzsEsPTkv_nOq0z2MQOVgjAlW4o3an-Z_Eq5S5bk/exec')
+                                .then(response => response.text())
+                                .then(url => {
+                                    setLoading(false); // Reset loading state
+                                    if (url && url.startsWith('http')) {
+                                        window.location.href = url;
+                                    } else {
+                                        alert('WhatsApp link not found.');
+                                    }
+                                })
+                                .catch(() => {
+                                    setLoading(false);
+                                    alert('Could not fetch WhatsApp link.');
+                                });
+                        })
+                        .catch(error => {
+                            setLoading(false);
+                            console.error('Error:', error);
+                            alert('An error occurred. Please try again.');
+                        });
+                    }
+                </script>
+                    
+                    
+                    
+            </form>
+        </div>
+
+       
+</body>
+
+</html>
